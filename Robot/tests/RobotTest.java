@@ -11,4 +11,9 @@ class RobotTest {
     public void test_getName() {
         assertEquals("buddy", buddy.getName());
     }
+
+    @Test
+    public void test_getWorkingIsFalseOnCreation() {
+        assertFalse(buddy.isWorking());
+    }
 }
