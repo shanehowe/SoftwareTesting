@@ -1,45 +1,58 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RobotTest {
 
     Robot buddy;
 
+    @BeforeAll
+    void beforeAll() {
+        buddy = new Robot("buddy", 20);
+        System.out.println("Before test suite");
+    }
+
     @BeforeEach
-    public void setUp() {
-        buddy = new Robot("buddy");
+    public void beforeEach() {
+        System.out.println("Before each test case");
+        buddy.turnOff();
     }
 
     @Test
-    public void test_getName() {
+    @Order(2)
+    @DisplayName("Hello World")
+    public void testGetName() {
         assertEquals("buddy", buddy.getName());
     }
 
     @Test
-    public void test_getName_throwsIllegalArgumentExceptionWhenEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> new Robot(""));
+    public void testGetNameThrowsIllegalArgumentExceptionWhenEmpty() {
+        assertThrows(IllegalArgumentException.class, () -> new Robot("", 20));
     }
 
     @Test
-    public void test_getWorkingIsFalseOnCreation() {
+    public void testGetWorkingIsFalseOnCreation() {
         assertFalse(buddy.isWorking());
     }
 
     @Test
-    public void test_turnOnSetsWorkingToTrue() {
+    public void testTurnOnSetsWorkingToTrue() {
         buddy.turnOn();
         assertTrue(buddy.isWorking());
     }
 
     @Test
-    public void test_getWorkingMessageWhenInWorkingMode() {
+    public void testGetWorkingMessageWhenInWorkingMode() {
         buddy.turnOn();
         assertEquals("I am in working mode!", buddy.getWorkingMessage());
     }
 
     @Test
-    public void test_getWorkingMessage_throwsExceptionWhenNotInWorkingMode() {
+    @Order(1)
+    public void testGetWorkingMessageThrowsExceptionWhenNotInWorkingMode() {
         assertThrows(IllegalStateException.class, () -> buddy.getWorkingMessage());
     }
+
 }
